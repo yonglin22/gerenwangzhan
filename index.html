@@ -575,7 +575,16 @@
       const localSrc = qr.getAttribute('data-local-src') || './assets/wechat-qr.jpg';
       const onlineSrc = qr.getAttribute('data-online-src') || 'https://yonglin22.github.io/gerenwangzhan/assets/wechat-qr.jpg';
       const isLocal = window.location.protocol === 'file:';
-      qr.src = isLocal ? localSrc : '/gerenwangzhan/assets/wechat-qr.jpg';
+      // Host-agnostic path strategy:
+      // - local file preview: use local relative asset
+      // - GitHub Pages project path: use /gerenwangzhan/assets/...
+      // - other hosts/CDNs: use relative asset
+      const isGithubPagesProject =
+        window.location.hostname.endsWith('github.io') &&
+        window.location.pathname.includes('/gerenwangzhan/');
+      qr.src = isLocal
+        ? localSrc
+        : (isGithubPagesProject ? '/gerenwangzhan/assets/wechat-qr.jpg' : localSrc);
       qr.onerror = function () {
         if (qr.src !== onlineSrc) qr.src = onlineSrc;
       };
