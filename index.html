@@ -526,7 +526,7 @@
         <h2 class="section-title">准备推进你的 AI Agent 或数字人项目？</h2>
         <p>添加微信发送「行业、当前问题、目标指标」，我将在24小时内回复合作建议与实施路径。</p>
         <div class="wechat-wrap">
-          <img id="wechat-qr" src="./assets/wechat-qr.jpg" alt="微信二维码" />
+          <img id="wechat-qr" src="./assets/wechat-qr.jpg" data-local-src="./assets/wechat-qr.jpg" data-online-src="https://yonglin22.github.io/gerenwangzhan/assets/wechat-qr.jpg" alt="微信二维码" />
         </div>
         <div class="wechat-tip">微信扫码添加沟通</div>
         <p style="margin-top:14px;">邮箱：1016020816@qq.com ｜ 城市：杭州</p>
@@ -572,9 +572,13 @@
     (function () {
       const qr = document.getElementById('wechat-qr');
       if (!qr) return;
-      if (window.location.protocol !== 'file:') {
-        qr.src = '/gerenwangzhan/assets/wechat-qr.jpg';
-      }
+      const localSrc = qr.getAttribute('data-local-src') || './assets/wechat-qr.jpg';
+      const onlineSrc = qr.getAttribute('data-online-src') || 'https://yonglin22.github.io/gerenwangzhan/assets/wechat-qr.jpg';
+      const isLocal = window.location.protocol === 'file:';
+      qr.src = isLocal ? localSrc : '/gerenwangzhan/assets/wechat-qr.jpg';
+      qr.onerror = function () {
+        if (qr.src !== onlineSrc) qr.src = onlineSrc;
+      };
     })();
   </script>
 </body>
